@@ -1,4 +1,4 @@
-# charging_model
+# Charging Model Instructions
 
 Clone the repository to your local files.
 
