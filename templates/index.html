@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Calculation Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            max-width: 450px;
+            width: 100%;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            text-align: left;
+            width: 100%;
+            margin-left: 10px;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container button {
+            width: 100%; /* Set to 100% to match the width of the button */
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box; /* Ensures padding is included in width */
+        }
+
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            padding: 20px;
+            background-color: #e7f7e7;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Ensure result box takes up full width of form */
+            margin-left: 0; /* Remove any left margin to align with the form */
+        }
+
+        .result p {
+            margin: 0;
+        }
+
+        .result p span {
+            font-size: 22px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Enter Values</h2>
+    <form action="/" method="POST">
+        <!-- Vehicle ID -->
+        <label for="id">Vehicle ID:</label>
+        <input type="number" name="id" value="{{ id }}" required>
+
+        <!-- Daily Commute -->
+        <label for="commute">Daily Commute (One-Way):</label>
+        <input type="number" name="commute" value="{{ commute }}" required>
+
+        <!-- Number of Commutes -->
+        <label for="numCommutes">Number of Commutes per Day:</label>
+        <input type="number" name="numCommutes" value="{{ numCommutes }}" required>
+
+        <!-- Longest Trip -->
+        <label for="longestTrip">Longest Annual Trip (in miles):</label>
+        <input type="number" name="longestTrip" value="{{ longestTrip }}" required>
+
+        <!-- Number of Trips over Vehicle's Range -->
+        <label for="numOverRange">Number of Trips over the Range of your Vehicle:</label>
+        <input type="number" name="numOverRange" value="{{ numOverRange }}" required>
+
+        <!-- Home Charging Option (Dropdown) -->
+        <label for="home_charging">Do you have home charging?</label>
+        <select name="home_charging" id="home_charging" required>
+            <option value="yes" {% if home_charging == 'yes' %}selected{% endif %}>Yes</option>
+            <option value="no" {% if home_charging == 'no' %}selected{% endif %}>No</option>
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result is not none %}
+        <div class="result">
+            <p>Calculated Result: <span>{{ result }}</span> hours per year</p>
+        </div>
+    {% else %}
+        <div class="result">
+            <p>No calculation made yet.</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

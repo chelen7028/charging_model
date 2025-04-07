@@ -35,7 +35,7 @@ def select_trips(eligible_trips, longest_trip, trips_over_threshold):
 
 # fast_charging_distribution(df, 47492, 1000, 10)
 
-def estimate_charging_delay(df, id, work_commute=0, trips_per_day=0, longest_trip = 0, trips_over_threshold = 0, home_charging=True, charger_power=150, plot_convergence = False):
+def estimate_charging_delay(id, work_commute=0, trips_per_day=0, longest_trip = 0, trips_over_threshold = 0, home_charging=True, charger_power=150, plot_convergence = False):
     '''
     Provides an estimate for the annual delay in hours from charging an EV.
 
@@ -44,6 +44,8 @@ def estimate_charging_delay(df, id, work_commute=0, trips_per_day=0, longest_tri
     A delay is considered time that would otherwise be spent driving/commuting. Overnight charging does not incur any delays.
     '''
     days = 260
+
+    df = pd.read_excel('veh.xlsx')
 
     car = df[(df['id']==id)]
     for _, row in car.iterrows():
@@ -113,15 +115,15 @@ def estimate_charging_delay(df, id, work_commute=0, trips_per_day=0, longest_tri
         
         all_averages.append(average_charges)
     
-    if plot_convergence:
-        _, ax = plt.subplots()
-        ax.plot(range(1,len(all_averages)+1), all_averages, marker='.', linestyle='-')
+    # if plot_convergence:
+    #     _, ax = plt.subplots()
+    #     ax.plot(range(1,len(all_averages)+1), all_averages, marker='.', linestyle='-')
 
-        # Add labels and title
-        plt.xlabel("Iteration")
-        plt.ylabel("Number of Charges (Running Average)")
-        plt.title("Average estimated number of charges from NHTS Dataset for long-distance trips")
-        plt.show()
+    #     # Add labels and title
+    #     plt.xlabel("Iteration")
+    #     plt.ylabel("Number of Charges (Running Average)")
+    #     plt.title("Average estimated number of charges from NHTS Dataset for long-distance trips")
+    #     plt.show()
 
     #print('final long charges', long_trip_charges) 
     total_charges += long_trip_charges
@@ -145,7 +147,7 @@ trips_over_threshold = 5
 home_charging = False
 charger_power = 150
 
-print("EV:", estimate_charging_delay(df, id, work_commute_one_way, trips_per_day, longest_trip, trips_over_threshold, home_charging, charger_power, True), "hours")
+# print("EV:", estimate_charging_delay(id, work_commute_one_way, trips_per_day, longest_trip, trips_over_threshold, home_charging, charger_power, True), "hours")
 
 
 # id = 47908 #Tesla model 3
