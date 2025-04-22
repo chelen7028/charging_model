@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Calculation Form</title>
+    <title>Charging Delay Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
         }
 
         .form-container {
-            max-width: 450px;
+            max-width: 700px;
             width: 100%;
             background-color: #fff;
             padding: 30px;
@@ -92,6 +92,39 @@
             font-size: 22px;
             color: #4CAF50;
         }
+
+        .result p.header {
+            font-size: 24px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #6c6b6b;
+        }
+
+        .result p.sub-result {
+            font-size: 16px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .result .sub-span {
+            font-size: 18px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .result p.sub-result-gas {
+            font-size: 16px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .result .sub-span-gas {
+            font-size: 18px;
+            color: #b74747;
+            font-weight: bold;
+        }
+
+
     </style>
 </head>
 <body>
@@ -103,25 +136,52 @@
         <label for="id">Vehicle ID:</label>
         <input type="number" name="id" required>
 
-        <!-- Daily Commute -->
-        <label for="commute">Daily Commute (One-Way):</label>
-        <input type="number" name="commute" required>
-
         <!-- Number of Commutes -->
-        <label for="numCommutes">Number of Commutes per Day:</label>
+        <label for="numCommutes">How many days do you commute to work?</label>
         <input type="number" name="numCommutes" required>
 
-        <!-- Longest Trip -->
-        <label for="longestTrip">Longest Annual One-Way Trip (in miles):</label>
-        <input type="number" name="longestTrip" required>
+        <!-- Daily Commute -->
+        <label for="commute">How far do you drive to work?:</label>
+        <input type="number" name="commute" required>
+
+        <!-- Week Trips -->
+        <label for="trip_week">In a typical work day, how many non-commute trips do you make?</label>
+        <input type="number" name="trip_week" >
+
+        <!-- Week Trip Distances -->
+        <label for="trip_dist_week">What is the average distance of these trips?</label>
+        <input type="number" name="trip_dist_week" >
+
+        <!-- Weekend Trips -->
+        <label for="trip_weekend">In a typical non-work day, how many trips do you make?</label>
+        <input type="number" name="trip_weekend" >
+
+        <!-- Weekend Trip Distances -->
+        <label for="trip_dist_weekend">What is the average distance of these trips?</label>
+        <input type="number" name="trip_dist_weekend" >
 
         <!-- Number of Trips over Vehicle's Range -->
-        <label for="numOverRange">Annual Trips over the Range of your Vehicle:</label>
+        <label for="numOverRange">Every year, how many trips do you take with a distance greater than the range of this vehicle?:</label>
         <input type="number" name="numOverRange" required>
+
+        <!-- Longest Trip -->
+        <label for="longestTrip">What is the distance of longest trip?</label>
+        <input type="number" name="longestTrip" required>
 
         <!-- Home Charging Option (Dropdown) -->
         <label for="home_charging">Do you have home charging?</label>
-        <select name="home_charging" id="home_charging" required>
+        <select name="home_charging" id="home_charging" >
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <!-- Number of Trips over Vehicle's Range -->
+        <label for="home_charger_power">If yes, what is the power of this charger in kW?:</label>
+        <input type="number" step="0.1" name="home_charger_power">
+
+        <!-- Work Charging Option (Dropdown) -->
+        <label for="work_charging">Do you have work charging?</label>
+        <select name="work_charging" id="work_charging" >
             <option value="yes">Yes</option>
             <option value="no">No</option>
         </select>
@@ -130,9 +190,16 @@
         <button type="submit">Calculate</button>
     </form>
 
-    {% if result is not none %}
+    {% if result is not none and result|length >= 3%}
         <div class="result">
-            <p>Estimated Annual Delay: <span>{{ result }}</span> hours per year</p>
+            <p class="header">With a low-emission vehicle, you would experience...</p>
+            <p>Estimated Annual Delay: <span>{{ result[2] }}</span> hours per year</p>
+            <p class="sub-result">From weekly trips: <span class="sub-span">{{ result[0] }}</span> hours per week</p>
+            <p class="sub-result">From long trips: <span class="sub-span">{{ result[1] }}</span> hours per year</p>
+            <p class="header">With a gas vehicle, you would experience...</p>
+            <p>Estimated Annual Delay: <span>{{ result[5] }}</span> hours per year</p>
+            <p class="sub-result-gas">From weekly trips: <span class="sub-span-gas">{{ result[3] }}</span> hours per week</p>
+            <p class="sub-result-gas">From long trips: <span class="sub-span-gas">{{ result[4] }}</span> hours per year</p>
         </div>
     {% else %}
         <div class="result">
